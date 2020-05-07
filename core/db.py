@@ -25,7 +25,10 @@ class DB(Base):
     @property
     def conn(self):
         try:
-            conn = psycopg2.connect(**self.get_cfg('db'))
+            conn = psycopg2.connect(
+                host=self.model.host, port=self.model.port, dbname=self.model.dbname, user=self.model.user,
+                password=self.model.password
+            )
             conn.set_client_encoding('latin1')
             return conn
         except Exception as e:
@@ -81,13 +84,16 @@ class DB(Base):
 
     def get(self, query):
         try:
-            if self.conn:
-                cur = self.cur
-                cur.execute(query)
-                self.log(query, 'debug')
-                result = cur.fetchall()
-                self.log(result, 'debug')
-                return dict_to_prop(result)
+            config = self.cfg.get('db')
+            for conf in config:
+                self.model = dict_to_prop(conf)
+                if self.conn:
+                    cur = self.cur
+                    cur.execute(query)
+                    self.log(query, 'debug')
+                    result = cur.fetchall()
+                    self.log(result, 'debug')
+                    yield self.model.nickname, dict_to_prop(result)
         except Exception as e:
             self.log('Error when getting data', 'critical')
             return False
