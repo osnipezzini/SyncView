@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ###########################################################################
-## Python code generated with wxFormBuilder (version 3.9.0 Apr 16 2020)
+## Python code generated with wxFormBuilder (version 3.9.0 May  7 2020)
 ## http://www.wxformbuilder.org/
 ##
 ## PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,7 +21,7 @@ _ = gettext.gettext
 class ConfigUI ( wx.Dialog ):
 
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Configurações do banco de dados"), pos = wx.DefaultPosition, size = wx.Size( 422,200 ), style = wx.DEFAULT_DIALOG_STYLE )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = _(u"Configurações do banco de dados"), pos = wx.DefaultPosition, size = wx.Size( 422,230 ), style = wx.DEFAULT_DIALOG_STYLE )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -32,14 +32,28 @@ class ConfigUI ( wx.Dialog ):
 		bSizer7 = wx.BoxSizer( wx.VERTICAL )
 
 		self.list_config = wx.dataview.DataViewListCtrl( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.col_name = self.list_config.AppendTextColumn( _(u"Apelido"), wx.DATAVIEW_CELL_INERT, -1, wx.ALIGN_CENTER_HORIZONTAL, wx.DATAVIEW_COL_RESIZABLE|wx.DATAVIEW_COL_SORTABLE )
-		self.col_host = self.list_config.AppendTextColumn( _(u"Host"), wx.DATAVIEW_CELL_INERT, -1, wx.ALIGN_CENTER_HORIZONTAL, wx.DATAVIEW_COL_RESIZABLE )
+		self.col_idx = self.list_config.AppendTextColumn( _(u"Index"), wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_LEFT, wx.dataview.DATAVIEW_COL_HIDDEN )
+		self.col_name = self.list_config.AppendTextColumn( _(u"Apelido"), wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_CENTER_HORIZONTAL, wx.dataview.DATAVIEW_COL_RESIZABLE|wx.dataview.DATAVIEW_COL_SORTABLE )
+		self.col_host = self.list_config.AppendTextColumn( _(u"Host"), wx.dataview.DATAVIEW_CELL_INERT, -1, wx.ALIGN_CENTER_HORIZONTAL, wx.dataview.DATAVIEW_COL_RESIZABLE )
 		bSizer7.Add( self.list_config, 1, wx.ALL|wx.EXPAND, 5 )
 
 		self.pnl_config = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.pnl_config.Hide()
 
 		bSizer41 = wx.BoxSizer( wx.VERTICAL )
+
+		bSizer11 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_staticText26 = wx.StaticText( self.pnl_config, wx.ID_ANY, _(u"Apelido"), wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText26.Wrap( -1 )
+
+		bSizer11.Add( self.m_staticText26, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		self.text_nickname = wx.TextCtrl( self.pnl_config, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer11.Add( self.text_nickname, 1, wx.ALL, 5 )
+
+
+		bSizer41.Add( bSizer11, 0, wx.EXPAND, 5 )
 
 		fgSizer2 = wx.FlexGridSizer( 0, 4, 0, 0 )
 		fgSizer2.AddGrowableCol( 1 )
@@ -119,19 +133,12 @@ class ConfigUI ( wx.Dialog ):
 		bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
 		self.btn_add = wx.BitmapButton( self.pnl_button, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
-
-		self.btn_add.SetBitmap( wx.Bitmap( u"C:\\Projetos\\Python\\SyncView\\resources\\img\\icons-add.png", wx.BITMAP_TYPE_ANY ) )
-		self.btn_add.SetBitmapPosition( wx.TOP )
 		bSizer6.Add( self.btn_add, 0, wx.ALL, 5 )
 
 		self.btn_edit = wx.BitmapButton( self.pnl_button, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
-
-		self.btn_edit.SetBitmap( wx.Bitmap( u"C:\\Projetos\\Python\\SyncView\\resources\\img\\icons-edit.png", wx.BITMAP_TYPE_ANY ) )
 		bSizer6.Add( self.btn_edit, 0, wx.ALL, 5 )
 
 		self.btn_delete = wx.BitmapButton( self.pnl_button, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
-
-		self.btn_delete.SetBitmap( wx.Bitmap( u"C:\\Projetos\\Python\\SyncView\\resources\\img\\icons-delete.png", wx.BITMAP_TYPE_ANY ) )
 		bSizer6.Add( self.btn_delete, 0, wx.ALL, 5 )
 
 
@@ -150,6 +157,7 @@ class ConfigUI ( wx.Dialog ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.exit )
 		self.buttonBoxCancel.Bind( wx.EVT_BUTTON, self.cancel )
 		self.buttonBoxSave.Bind( wx.EVT_BUTTON, self.accept )
 		self.btn_add.Bind( wx.EVT_BUTTON, self.add_config )
@@ -161,6 +169,9 @@ class ConfigUI ( wx.Dialog ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def exit( self, event ):
+		event.Skip()
+
 	def cancel( self, event ):
 		event.Skip()
 
