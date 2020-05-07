@@ -1,0 +1,6 @@
+/venv/
+/.idea/
+/build/SyncView/
+/dist/
+/log/
+__pycache__/
