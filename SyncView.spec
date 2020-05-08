@@ -41,14 +41,16 @@ exe = EXE(pyz,
           a.datas,
           [],
           name='SyncView',
-          debug=False,
+          debug=all,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False,
-          icon='C:\\Projetos\\Python\\SyncView\\resources\\Icon.ico')
+          icon='C:\\Projetos\\Python\\SyncView\\resources\\Icon.ico',
+          console=False
+          )
+
 
 if platform.system() == 'Darwin':
     info_plist = {'addition_prop': 'additional_value'}
