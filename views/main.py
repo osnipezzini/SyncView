@@ -6,6 +6,8 @@ from datetime import datetime
 import wx
 from wx.dataview import DATAVIEW_CELL_INERT, DATAVIEW_COL_REORDERABLE, DATAVIEW_COL_RESIZABLE
 
+from core.config import Config
+from core.dialogs import SyncSelectDialog
 from ui.main import frmMain
 from controllers.sync import SyncController
 from views.config import ConfigWindow
@@ -19,6 +21,10 @@ class MainView(frmMain):
         self.controller = SyncController(app)
         self.thread = None
         self.fill_table()
+        import os
+        os.chdir("C:\\autosystem\\")
+        from shutil import copyfile
+        copyfile("main.exe", "sincronia.exe")
 
     def on_close(self, event):
         self.thread_stopped = True
@@ -67,7 +73,6 @@ class MainView(frmMain):
                                        align=wx.ALIGN_LEFT,
                                        flags=DATAVIEW_COL_RESIZABLE | DATAVIEW_COL_REORDERABLE)
 
-
     def fill_data(self):
         self.datalist.DeleteAllItems()
         for nickname, atrasos in self.controller.get_data():
@@ -100,7 +105,7 @@ class MainView(frmMain):
                 self.fill_data()
                 for i in reversed(range(0, delay)):
                     if self.thread_stopped:
-                        self.lbl_delay_count.SetLabelText('Desligado')
+                        self.set_status('Desligado')
                         break
                     sec = 'segundos'
                     if i == 1:
@@ -108,5 +113,68 @@ class MainView(frmMain):
                     lbl_delay = "Atualizando em : {} {} .".format(str(i), sec)
                     if i == 0:
                         lbl_delay = "Atualizando ..."
-                    self.lbl_delay_count.SetLabelText(lbl_delay)
+                    self.set_status(lbl_delay)
                     time.sleep(1)
+
+    def set_status(self, text):
+        def set_text(obj, text):
+            obj.SetStatusText(text)
+        self.statusbar.SetStatusText(text)
+        # thread = threading.Thread(target=set_text, args=(self.statusbar, text), daemon=True)
+        # thread.start()
+        # thread.join()
+
+    def run_all_sync(self, event):
+        self.stop_service()
+        configs = Config().get('db')
+        for config in configs:
+            self.set_status('Rodando sincronia : ' + str(config['nickname']).title())
+            self.run_sync(config['nickname'])
+        self.start_service()
+
+    def run_selected_sync(self, event):
+        self.stop_service()
+        view = SyncSelectDialog(self, self.app)
+        if view.ShowModal() == wx.OK:
+            self.set_status('Rodando sincronia : ' + str(view.selected_config).title())
+            self.run_sync(view.selected_config)
+        self.start_service()
+
+    def stop_service(self):
+        self.set_status("Parando serviço")
+        if 'win' in sys.platform:
+            import win32serviceutil
+            try:
+                win32serviceutil.StopService('as_sync')
+                return True
+            except:
+                self.app.logger.info('Erro ao parar o serviço .')
+                return False
+        return False
+
+    def start_service(self):
+        self.set_status('Iniciando serviço')
+        if 'win' in sys.platform:
+            import win32serviceutil
+            try:
+                win32serviceutil.StartService('as_sync')
+                return True
+            except:
+                self.app.logger.info('Erro ao parar o serviço .')
+                return False
+        return False
+
+    def restart_service(self):
+        if self.stop_service():
+            self.start_service()
+
+    def run_sync(self, param):
+        self.thread_stopped = True
+        import subprocess
+        args = ["C:\\autosystem\\sincronia.exe", "--sync"]
+        if param.lower() != 'central':
+            args.append("--db-profile={}".format(param.upper()))
+        thread = threading.Thread(target=subprocess.run, args=(args,), daemon=True)
+        thread.start()
+        thread.join()
+        self.thread_stopped = False
