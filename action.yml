@@ -1,0 +1,12 @@
+name: 'pyinstaller action'
+description: 'Run pyinstaller'
+inputs:
+  script:
+    description: 'Python script to bundle'
+    required: true
+    default: 'SyncView.spec'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.script }}
