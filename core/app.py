@@ -2,6 +2,7 @@ import os
 import sys
 
 import wx
+from elibs import dict_to_prop
 from wx import App as wxApp
 
 from core.config import Config
@@ -17,6 +18,30 @@ class App(wxApp):
         self.AppName = name
         self.AppDisplayName = name
         self.icon = wx.Icon(self.get_resource('Icon.ico'))
+
+    @property
+    def version(self):
+        return os.environ.get('release_version')
+
+    def check_version(self):
+        import ftplib
+        filename = 'programs_release.json'
+        try:
+            ftp = ftplib.FTP('ftps.sistempostos.com.br')
+            ftp.login('dev@sistempostos.com.br', '*1500-Blu@.')
+            ftp.retrbinary("RETR " + filename, open(filename, 'wb').write)
+            ftp.quit()
+            with open(filename, 'r') as json_file:
+                import json
+                data_json = json.load(json_file)
+                data = dict_to_prop(data_json)
+                mensagem = f"""Há uma nova versão disponível do programa .
+
+                                Para fazer o download acesse : {data.syncview.download_url}"""
+                if data.syncview.version > self.version:
+                    wx.MessageBox(mensagem, "Nova versão !", wx.ICON_INFORMATION)
+        except Exception as e:
+            self.logger.debug('Erro ao receber informações do ftp : \n\n' + str(e))
 
     @property
     def basepath(self):
@@ -49,6 +74,7 @@ class App(wxApp):
             raise Exception('Path must be string or a list')
 
     def run(self):
+        self.check_version()
         cfg = Config()
         if not cfg.is_config('db'):
             msg = wx.MessageBox(
