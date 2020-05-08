@@ -24,22 +24,21 @@ class App(wxApp):
         return os.environ.get('release_version')
 
     def check_version(self):
-        import ftplib
-        filename = 'programs_release.json'
         try:
-            ftp = ftplib.FTP('ftps.sistempostos.com.br')
-            ftp.login('dev@sistempostos.com.br', '*1500-Blu@.')
-            ftp.retrbinary("RETR " + filename, open(filename, 'wb').write)
-            ftp.quit()
-            with open(filename, 'r') as json_file:
-                import json
-                data_json = json.load(json_file)
-                data = dict_to_prop(data_json)
-                mensagem = f"""Há uma nova versão disponível do programa .
+            url = "https://ellitedev.imfast.io/programs_release.json"
+            import requests
+            req = requests.get(url)
+            data = dict_to_prop(req.json())
 
-                                Para fazer o download acesse : {data.syncview.download_url}"""
-                if data.syncview.version > self.version:
-                    wx.MessageBox(mensagem, "Nova versão !", wx.ICON_INFORMATION)
+            if data.syncview.version > self.version:
+                from core.dialogs import VersionDialogView
+                dlg = VersionDialogView()
+                dlg.link_download.SetURL(data.syncview.download_url)
+                dlg.link_download.SetLabelText(data.syncview.download_url)
+                dlg.SetIcon(self.icon)
+                img = wx.Bitmap(self.get_resource(['img', 'icon_information.png']))
+                dlg.img_information.SetBitmap(img)
+                dlg.ShowModal()
         except Exception as e:
             self.logger.debug('Erro ao receber informações do ftp : \n\n' + str(e))
 

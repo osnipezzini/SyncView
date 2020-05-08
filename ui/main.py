@@ -10,6 +10,7 @@
 import wx
 import wx.xrc
 import wx.dataview
+import wx.adv
 
 ###########################################################################
 ## Class frmMain
@@ -18,7 +19,7 @@ import wx.dataview
 class frmMain ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Sincronia Status", pos = wx.DefaultPosition, size = wx.Size( 722,442 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Sincronia Status", pos = wx.DefaultPosition, size = wx.Size( 722,359 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -104,6 +105,91 @@ class frmMain ( wx.Frame ):
 		event.Skip()
 
 	def open_config( self, event ):
+		event.Skip()
+
+
+###########################################################################
+## Class VersionDialog
+###########################################################################
+
+class VersionDialog ( wx.Dialog ):
+
+	def __init__( self, parent ):
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Nova versão encontrada", pos = wx.DefaultPosition, size = wx.Size( 431,217 ), style = wx.DEFAULT_DIALOG_STYLE )
+
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+		bSizer7 = wx.BoxSizer( wx.VERTICAL )
+
+		bSizer12 = wx.BoxSizer( wx.HORIZONTAL )
+
+		bSizer13 = wx.BoxSizer( wx.VERTICAL )
+
+		self.img_information = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer13.Add( self.img_information, 0, wx.ALL, 5 )
+
+
+		bSizer12.Add( bSizer13, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+
+		bSizer9 = wx.BoxSizer( wx.VERTICAL )
+
+		bSizer10 = wx.BoxSizer( wx.VERTICAL )
+
+		self.m_staticText6 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText6.Wrap( -1 )
+
+		bSizer10.Add( self.m_staticText6, 0, wx.ALL, 5 )
+
+		self.m_staticText4 = wx.StaticText( self, wx.ID_ANY, u"Há uma nova versão disponível do programa .", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText4.Wrap( -1 )
+
+		bSizer10.Add( self.m_staticText4, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+
+		bSizer9.Add( bSizer10, 1, wx.EXPAND, 5 )
+
+		bSizer11 = wx.BoxSizer( wx.VERTICAL )
+
+		self.m_staticText5 = wx.StaticText( self, wx.ID_ANY, u"Para fazer o download acesse : ", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText5.Wrap( -1 )
+
+		bSizer11.Add( self.m_staticText5, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+		self.link_download = wx.adv.HyperlinkCtrl( self, wx.ID_ANY, u"wxFB Website", u"http://www.wxformbuilder.org", wx.DefaultPosition, wx.DefaultSize, wx.adv.HL_DEFAULT_STYLE )
+		bSizer11.Add( self.link_download, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+
+		bSizer9.Add( bSizer11, 1, wx.EXPAND, 5 )
+
+
+		bSizer12.Add( bSizer9, 1, wx.EXPAND, 5 )
+
+
+		bSizer7.Add( bSizer12, 1, wx.EXPAND, 5 )
+
+		bSizer8 = wx.BoxSizer( wx.VERTICAL )
+
+		self.btn_end_modal = wx.ToggleButton( self, wx.ID_ANY, u"Ok", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer8.Add( self.btn_end_modal, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+
+
+		bSizer7.Add( bSizer8, 0, wx.EXPAND, 5 )
+
+
+		self.SetSizer( bSizer7 )
+		self.Layout()
+
+		self.Centre( wx.BOTH )
+
+		# Connect Events
+		self.btn_end_modal.Bind( wx.EVT_TOGGLEBUTTON, self.ok_modal )
+
+	def __del__( self ):
+		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def ok_modal( self, event ):
 		event.Skip()
 
 
