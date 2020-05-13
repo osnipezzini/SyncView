@@ -21,7 +21,7 @@ def get_binaries():
     return [(os.path.join('bin', lib_name), '')]
 
 a = Analysis(['app.py'],
-             pathex=['C:\\Projetos\\Python\\SyncView'],
+             pathex=['.'],
              binaries=[],
              datas=get_resources(),
              hiddenimports=[],
@@ -47,7 +47,7 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          icon='C:\\Projetos\\Python\\SyncView\\resources\\Icon.ico',
+          icon='resources\\Icon.ico',
           console=False
           )
 

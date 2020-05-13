@@ -3,7 +3,7 @@ name: Build Workflow
 on: [push, pull_request]
 
 jobs:
-  build-windows:
+  syncview-win64:
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -29,7 +29,7 @@ jobs:
         with:
           name: Windows
           path: dist/SyncView.exe
-  build-windows-x86:
+  syncview-win32:
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -56,7 +56,7 @@ jobs:
           name: Windows-x86
           path: dist/SyncView.exe
 
-#  build-ubuntu:
+#  syncview-linux:
 #    runs-on: ubuntu-latest
 #    steps:
 #      - name: Checkout
@@ -87,7 +87,7 @@ jobs:
 #          path: dist/SyncView
 #
 #
-#  build-macos:
+#  syncview-macos:
 #    runs-on: macOS-latest
 #    steps:
 #      - name: Checkout
