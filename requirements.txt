@@ -1,23 +1,11 @@
-altgraph==0.17
-certifi==2020.4.5.1
-cffi==1.14.0
-chardet==3.0.4
-cryptography==2.9.2
-elibs==1.0.25
-future==0.18.2
-idna==2.9
-numpy==1.18.4
-pefile==2019.4.18
-Pillow==7.1.2
-psycopg2-binary==2.8.5
-pycparser==2.20
-PyInstaller==3.6
-pypiwin32==223
-pywin32==227
-pywin32-ctypes==0.2.0
-requests==2.23.0
-six==1.14.0
-sqlparse==0.3.1
-urllib3==1.25.9
-winshell==0.6
-wxPython==4.1.0
+--index-url https://${FURY_AUTH}:@pypi.fury.io/ellitedev/
+--extra-index-url https://pypi.org/simple/
+cryptography
+Pillow
+psycopg2-binary
+pywin32
+requests
+urllib3
+winshell
+wxPython
+elibs
